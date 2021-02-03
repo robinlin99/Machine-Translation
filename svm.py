@@ -49,7 +49,6 @@ def cosine_similarity(x,y):
 '''
 Support Vector Machine:
 	- Input: (1) Bleu Score, (2) Cosine Similarity
-	- Validate if a general pattern can be established
 '''
 def svm_train(clf):
 	train_data_x, train_data_y = build_train("train.txt")

@@ -46,6 +46,11 @@ def cosine_similarity(x,y):
 	cosine = c / float((sum(l1)*sum(l2))**0.5) 
 	return cosine
 
+
+'''
+Logistic Regression:
+	- Input: (1) Bleu Score, (2) Cosine Similarity
+'''
 def logistic_regressor_train(clf):
 	train_data_x, train_data_y = build_train("train.txt")
 	clf.fit(train_data_x, train_data_y)
