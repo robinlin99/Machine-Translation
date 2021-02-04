@@ -200,4 +200,4 @@ I decided to show the results for logistic regression, as it performed better (a
 The original problem proposed in this short task was created by Professor Artzi. 
 
 ## License
-MIT © [Robin Lin]()
+MIT © [Robin Lin](https://robinlin99.github.io/Personal-Portfolio/)
