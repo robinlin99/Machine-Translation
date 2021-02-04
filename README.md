@@ -104,7 +104,7 @@ def cosine_similarity(x,y):
 	return cosine
 ```
 
-The main section of the code are the **smv_train, predict, accuracy, f1score, and classify** functions. 
+The main section of the code are the **svm_train, predict, accuracy, f1score, and classify** functions. 
 
 ```
 def svm_train(clf):
