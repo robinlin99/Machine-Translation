@@ -145,6 +145,14 @@ def classify():
 ```
 A similar explanation follows for **SVM.py**. 
 
+## Results
+
+I decided to show the results for logistic regression, as it performed better (although slightly) than the SVM. The decision boundary fitted on the training data as well as the confusion matrix are shown below. In the decision boundary image, orange dots represent machine translation and blue dots represent human translation. In the confusion matrix image, the label "0" represents human translation and the label "1" represents machine translation. Overall, the majority of testing data were classified correctly. There were 22 "M" labels classified incorrectly as "H" and 21 "H" labels classified incorrectly as "M". 
+
+![Decision Boundary](./Photos/logreg.png | width=100)
+
+![Confusion Matrix](./Photos/confusion_matrix.png | width=100)
+
 ## Credits
 The original problem proposed in this short task was created by Professor Artzi. 
 
