@@ -2,16 +2,16 @@
 This is my solution to the quick task created by Professor Artzi as part of the application for Independent Study with the LIL Lab. 
 
 ## Summary
-For this problem, I used two different models to tackle the binary classification task: Support Vector Machine (SVM) and Logistic Regression. For data pre-processing, I first extracted the training and testing data from the **.txt** files. Each training/testing sample has the following properties:
+For this problem, I used two different models to tackle the binary classification task: Support Vector Machine (SVM) and Logistic Regression. To prepare the data, I first extracted the training and testing data from the **.txt** files. Each training/testing sample has the following properties:
 - Source (Chinese)
 - Reference (Professional Translation)
 - Candidate (Candidate Translation)
 - BLEU (Bilingual Evaluation Understudy) Score
 - Label (Ground Truth)
 
-For training both models, I used two features as input: BLEU Score and Cosine Similarity. This is based on my intuition on how humans can approach this binary classification task: we are likely to categorize the candidate based on how "natural" or "similar" it is to natural human language. The BLEU Score and Cosine Similarity are two different measures that capture this idea of "similarity" to human language. 
+For training both models, I used two features as input: BLEU Score and Cosine Similarity. This is based on my intuition on how humans can approach this binary classification task: we are likely to categorize the candidate based on how "natural" or "similar" it is to natural human language. The BLEU Score and Cosine Similarity are two different measures that capture this idea of "similarity" to human language. The NLTK library was used to tokenize the data before calculating the Cosine Similarity. 
 
-After training both models, I evaluated their respective classification accuracies on the testing data as well as their F1 Scores. I achieved the following results:
+After training both models using Sklearn, I evaluated their respective classification accuracies on the testing data as well as their F1 Scores. I achieved the following results:
 - SVM: Accuracy = 74.14%, F1 = 0.7169811320754716
 - Logistic Regression: Accuracy = 75.29%, F1 = 0.7361963190184049
 
