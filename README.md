@@ -40,6 +40,111 @@ The runnable python code in this project are stored as follows:
 
 ## Code Samples 
 
+**extract.py** is used to parse through the training/testing files. The **extract** function returns a list of dictionaries, with each element representing a specific training/testing sample.
+
+```
+def extract(filename):
+	data = []
+	f = open(filename, "r")
+	raw = f.read()
+	paragraph_split = raw.split('\n\n')
+	for example in paragraph_split:
+		sample = {}
+		line_split = example.splitlines()
+		for i, line in enumerate(line_split):
+			if i == 0:
+				sample["source"] = line
+			if i == 1:
+				sample["reference"] = line
+			if i == 2:
+				sample["candidate"] = line
+			if i == 3:
+				sample["bleu"] = line
+			if i == 4:
+				sample["label"] = line
+		data.append(sample)
+	np_data = np.array(data)
+	return np_data
+```
+
+The dictionary for each sample has the following format:
+
+```
+{
+	"source" : source,
+	"reference": reference,
+	"candidate": candidate,
+	"bleu": bleu,
+	"label": label
+}
+```
+
+In **logistic_regression.py**, the **cosine_similarity** function computes the cosine similarity measure between two texts. 
+
+```
+def cosine_similarity(x,y):
+	# tokenization 
+	X_list = word_tokenize(x)  
+	Y_list = word_tokenize(y)   
+	l1 =[];l2 =[]  
+	X_set = set(X_list)
+	Y_set = set(Y_list)
+	# form a set containing keywords of both strings  
+	rvector = X_set.union(Y_set)  
+	for w in rvector: 
+	    if w in X_set: l1.append(1) # create a vector 
+	    else: l1.append(0) 
+	    if w in Y_set: l2.append(1) 
+	    else: l2.append(0) 
+	c = 0
+	# cosine formula  
+	for i in range(len(rvector)): 
+	        c+= l1[i]*l2[i] 
+	cosine = c / float((sum(l1)*sum(l2))**0.5) 
+	return cosine
+```
+
+The main section of the code are the **smv_train, predict, accuracy, f1score, and classify** functions. 
+
+```
+def svm_train(clf):
+	train_data_x, train_data_y = build_train("train.txt")
+	clf.fit(train_data_x, train_data_y)
+	return clf
+
+def predict(clf):
+	test_data_x, test_data_y = build_test("test.txt")
+	predicted = []
+	for sample in test_data_x:
+		proc_sample = np.array([list(sample)])
+		print(proc_sample)
+		pred = clf.predict(proc_sample)[0]
+		predicted.append(pred)
+	return predicted, test_data_y
+
+def accuracy(ground_truth, prediction):
+	total = len(ground_truth)
+	correct = 0
+	for i in range(total):
+		if ground_truth[i] == prediction[i]:
+			correct += 1
+	return float(correct)/total
+
+def f1score(ground_truth, prediction, average='macro'):
+	return f1_score(ground_truth, prediction)
+
+def classify():
+	clf = svm.SVC()
+	clf = svm_train(clf)
+	pred, ground_truth = predict(clf)
+	print(pred)
+	acc = accuracy(ground_truth,pred)
+	print("The % Accuracy is: " + str(float(acc*100)) + "%")
+	print("The F1 Score computed using Sklearn is: " + str(f1score(ground_truth, pred)))
+
+```
+A similar explanation follows for **SVM.py**. 
+
 ## Credits
 The original problem proposed in this short task was created by Professor Artzi. 
 
