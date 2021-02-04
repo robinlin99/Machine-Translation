@@ -2,16 +2,16 @@
 This is my solution to the quick task created by Professor Artzi as part of the application for Independent Study with the LIL Lab. 
 
 ## Summary
-For this problem, I used two different models to tackle the binary classification task: Support Vector Machine (SVM) and Logistic Regression. For data pre-processing, I first extracted the training and testing data from the **.txt** files. Each training/testing sample has the following properties:
+For this problem, I used two different models to tackle the binary classification task: Support Vector Machine (SVM) and Logistic Regression. To prepare the data, I first extracted the training and testing data from the **.txt** files. Each training/testing sample has the following properties:
 - Source (Chinese)
 - Reference (Professional Translation)
 - Candidate (Candidate Translation)
 - BLEU (Bilingual Evaluation Understudy) Score
 - Label (Ground Truth)
 
-For training both models, I used two features as input: BLEU Score and Cosine Similarity. This is based on my intuition on how humans can approach this binary classification task: we are likely to categorize the candidate based on how "natural" or "similar" it is to natural human language. The BLEU Score and Cosine Similarity are two different measures that capture this idea of "similarity" to human language. 
+For training both models, I used two features as input: BLEU Score and Cosine Similarity. This is based on my intuition on how humans can approach this binary classification task: we are likely to categorize the candidate based on how "natural" or "similar" it is to natural human language. The BLEU Score and Cosine Similarity are two different measures that capture this idea of "similarity" to human language. The NLTK library was used to tokenize the data before calculating the Cosine Similarity. 
 
-After training both models, I evaluated their respective classification accuracies on the testing data as well as their F1 Scores. I achieved the following results:
+After training both models using Sklearn, I evaluated their respective classification accuracies on the testing data as well as their F1 Scores. I achieved the following results:
 - SVM: Accuracy = 74.14%, F1 = 0.7169811320754716
 - Logistic Regression: Accuracy = 75.29%, F1 = 0.7361963190184049
 
@@ -104,10 +104,10 @@ def cosine_similarity(x,y):
 	return cosine
 ```
 
-The main section of the code are the **svm_train, predict, accuracy, f1score, and classify** functions. 
+The main section of the code are the **logistic_regressor, predict, accuracy, f1score, classify, plot_cm, and plot** functions. 
 
 ```
-def svm_train(clf):
+def logistic_regressor_train(clf):
 	train_data_x, train_data_y = build_train("train.txt")
 	clf.fit(train_data_x, train_data_y)
 	return clf
@@ -134,27 +134,70 @@ def f1score(ground_truth, prediction, average='macro'):
 	return f1_score(ground_truth, prediction)
 
 def classify():
-	clf = svm.SVC()
-	clf = svm_train(clf)
+	clf = LogisticRegression()
+	clf = logistic_regressor_train(clf)
 	pred, ground_truth = predict(clf)
 	print(pred)
 	acc = accuracy(ground_truth,pred)
 	print("The % Accuracy is: " + str(float(acc*100)) + "%")
 	print("The F1 Score computed using Sklearn is: " + str(f1score(ground_truth, pred)))
+	X, Y = build_train("train.txt")
+	cm = metrics.confusion_matrix(ground_truth, pred)
+	print(cm)
+	plot_cm(acc, cm)
+	# plot(X, Y, clf)
+
+def plot_cm(acc, cm):
+	plt.figure(figsize=(9,9))
+	sns.heatmap(cm, annot=True, fmt=".3f", linewidths=.5, square = True, cmap = 'Blues_r')
+	plt.ylabel('Actual label')
+	plt.xlabel('Predicted label')
+	all_sample_title = 'Accuracy Score: {0}'.format(acc)
+	plt.title(all_sample_title, size = 15)
+	plt.show()
+
+
+def plot(X,Y,clf):
+	# Plot the decision boundary. For that, we will assign a color to each
+	# point in the mesh [x_min, x_max]x[y_min, y_max].
+	font = {'weight' : 'bold',
+	'size'   : 14}
+	plt.rc('font', **font)
+	ax = plt.gca()
+	x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
+	y_min, y_max = X[:, 1].min() - .5, X[:, 1].max() + .5
+	h = .02  # step size in the mesh
+	xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+	Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+	# Put the result into a color plot
+	Z = Z.reshape(xx.shape)
+	plt.figure(1, figsize=(4, 3))
+	plt.pcolormesh(xx, yy, Z, cmap=plt.cm.Paired, shading="auto")
+	# Plot also the training points
+	plt.scatter(X[:, 0], X[:, 1], c=Y, edgecolors='k', cmap=plt.cm.Paired)
+	plt.xlabel('Bleu Score (Feature 1)')
+	plt.ylabel('Cosine Similarity (Feature 2)')
+	plt.xlim(xx.min(), xx.max())
+	plt.ylim(yy.min(), yy.max())
+	plt.title("Logistic Regression Decision Boundary Fitted on Training Data")
+	plt.xticks(())
+	plt.yticks(())
+	plt.show()
 
 ```
+
 A similar explanation follows for **SVM.py**. 
 
 ## Results
 
 I decided to show the results for logistic regression, as it performed better (although slightly) than the SVM. The decision boundary fitted on the training data as well as the confusion matrix are shown below. In the decision boundary image, orange dots represent machine translation and blue dots represent human translation. In the confusion matrix image, the label "0" represents human translation and the label "1" represents machine translation. Overall, the majority of testing data were classified correctly. There were 22 "M" labels classified incorrectly as "H" and 21 "H" labels classified incorrectly as "M". 
 
-![Decision Boundary](./Photos/logreg.png | width=100)
+![Decision Boundary](./Photos/logreg.png)
 
-![Confusion Matrix](./Photos/confusion_matrix.png | width=100)
+![Confusion Matrix](./Photos/confusion_matrix.png)
 
 ## Credits
 The original problem proposed in this short task was created by Professor Artzi. 
 
 ## License
-MIT © [Robin Lin]()
+MIT © [Robin Lin](https://robinlin99.github.io/Personal-Portfolio/)
