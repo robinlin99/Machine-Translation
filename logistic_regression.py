@@ -4,6 +4,8 @@ from nltk.tokenize import word_tokenize
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
+import seaborn as sns
+from sklearn import metrics
 
 def build_train(filename):
 	extracted = extract.extract(filename)
@@ -86,7 +88,19 @@ def classify():
 	print("The % Accuracy is: " + str(float(acc*100)) + "%")
 	print("The F1 Score computed using Sklearn is: " + str(f1score(ground_truth, pred)))
 	X, Y = build_train("train.txt")
-	plot(X, Y, clf)
+	cm = metrics.confusion_matrix(ground_truth, pred)
+	print(cm)
+	plot_cm(acc, cm)
+	# plot(X, Y, clf)
+
+def plot_cm(acc, cm):
+	plt.figure(figsize=(9,9))
+	sns.heatmap(cm, annot=True, fmt=".3f", linewidths=.5, square = True, cmap = 'Blues_r')
+	plt.ylabel('Actual label')
+	plt.xlabel('Predicted label')
+	all_sample_title = 'Accuracy Score: {0}'.format(acc)
+	plt.title(all_sample_title, size = 15)
+	plt.show()
 
 
 def plot(X,Y,clf):
@@ -107,11 +121,11 @@ def plot(X,Y,clf):
 	plt.pcolormesh(xx, yy, Z, cmap=plt.cm.Paired, shading="auto")
 	# Plot also the training points
 	plt.scatter(X[:, 0], X[:, 1], c=Y, edgecolors='k', cmap=plt.cm.Paired)
-	plt.xlabel('Bleu Score')
-	plt.ylabel('Cosine Similarity')
+	plt.xlabel('Bleu Score (Feature 1)')
+	plt.ylabel('Cosine Similarity (Feature 2)')
 	plt.xlim(xx.min(), xx.max())
 	plt.ylim(yy.min(), yy.max())
-	ax.set_title("Logistic Regression Decision Boundary")
+	plt.title("Logistic Regression Decision Boundary Fitted on Training Data")
 	plt.xticks(())
 	plt.yticks(())
 	plt.show()

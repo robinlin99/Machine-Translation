@@ -84,6 +84,7 @@ def classify():
 	acc = accuracy(ground_truth,pred)
 	print("The % Accuracy is: " + str(float(acc*100)) + "%")
 	print("The F1 Score computed using Sklearn is: " + str(f1score(ground_truth, pred)))
+	
 
 classify()
 
