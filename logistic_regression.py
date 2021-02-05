@@ -94,6 +94,8 @@ def classify():
 	# plot(X, Y, clf)
 
 def plot_cm(acc, cm):
+	font = {'weight' : 'bold',
+	'size'   : 20}
 	plt.figure(figsize=(9,9))
 	sns.heatmap(cm, annot=True, fmt=".3f", linewidths=.5, square = True, cmap = 'Blues_r')
 	plt.ylabel('Actual label')
@@ -107,7 +109,7 @@ def plot(X,Y,clf):
 	# Plot the decision boundary. For that, we will assign a color to each
 	# point in the mesh [x_min, x_max]x[y_min, y_max].
 	font = {'weight' : 'bold',
-	'size'   : 14}
+	'size'   : 20}
 	plt.rc('font', **font)
 	ax = plt.gca()
 	x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
